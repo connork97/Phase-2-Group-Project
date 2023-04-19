@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
+from models import Day, Activity, Time, Friend
 
 if __name__ == '__main__':
 
@@ -11,3 +12,4 @@ if __name__ == '__main__':
     session = Session()
     print("Session Created...")
 
+    
