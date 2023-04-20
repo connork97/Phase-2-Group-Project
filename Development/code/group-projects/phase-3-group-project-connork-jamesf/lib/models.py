@@ -10,11 +10,11 @@ class Day(Base):
     __tablename__ = "days"
 
     id = Column(Integer(), primary_key=True)
-    name = Column(String())
+    productivity = Column(Integer())
 
     def __repr__(self):
         return f"Day(id={self.id}, " + \
-            f"name={self.day})"
+            f"productivity={self.day})"
     
 class Activity(Base):
     __tablename__ = "activities"
@@ -23,23 +23,15 @@ class Activity(Base):
     task = Column(String())
     hours = Column(Integer())
     minutes = Column(Integer())
-    friend_id = Column(Integer(), ForeignKey("friends.id"))
-    # time_id = Column(Integer(), ForeignKey("times.id"))
+    productivity = Column(Integer())
 
     def __repr__(self):
         return f"Activity(id={self.id}, " + \
             f"task={self.task}, " + \
-            f"friend_id={self.friend_id if self.friend_id else None})"
+            f"hours={self.hours}" + \
+            f"minutes={self.minutes}" + \
+            f"procutivity={self.productivity})"
 
-# class Time(Base):
-#     __tablename__ = "times"
-
-#     id = Column(Integer(), primary_key=True)
-#     time = Column(String())
-
-#     def __repr__(self):
-#         return f"Time(id={self.id}, " + \
-#             f"time={self.task})"
 
 class Friend(Base):
     __tablename__ = "friends"
