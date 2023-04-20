@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from ipdb import set_trace
 
-from datetime import time, timedelta, datetime
 
 from models import (Base, Day, Friend, Activity)
 
@@ -20,7 +19,7 @@ if __name__ == '__main__':
     print("Dropping Tables...")
     session.query(Day).delete()
     session.query(Friend).delete()
-    # session.query(Activity).delete()
+    session.query(Activity).delete()
     session.commit()
 
 
@@ -53,16 +52,51 @@ if __name__ == '__main__':
     session.commit()
     
     print("All friends added!")
-    # time.isoformat(timespec="minutes")
-    current_time = time(hour=8, minute=0)
-    print("The current time is:", current_time.isoformat(timespec="minutes"))
-    # current_time = time(hour=current_time.hour + 1, minute=current_time.minute).isoformat(timespec="minutes")
-    # print("The new time is:", current_time)
 
-    find_parentheses = Activity(task="wasting time", hours=2, minutes=30, friend_id=1)
-    session.add(find_parentheses)
+
+    snooze = Activity(task="Hit the snooze button...", hours=0, minutes=30)
+    scroll_phone = Activity(task="Scroll on your phone for an hour.", hours=1, minutes=0)
+    get_ready = Activity(task="Get out of bed and get ready for the day.", hours=0, minutes=30)
+
+    breakfast = Activity(task="Eat breakfast.", hours=0, minutes=30)
+    skip_breakfast = Activity(task="Skip breakfast and go to class.  You're running late!", hours=0, minutes=0)
+
+    go_to_class = Activity(task="Go to class.", hours=0, minutes=0)
+    chores = Activity(task="Do some chores around the house.", hours=0, minutes=45)
+    study = Activity(task="Study for an hour.", hours=1, minutes=0)
+
+    exercise = Activity(task="Go to the gym.", hours=1, minutes=30)
+    hike = Activity(task="Go for a hike!", hours=2, minutes=0)
+    touch_grass = Activity(task="Touch some grass.", hours=0, minutes=15)
+
+    lunch = Activity(task="Grab some lunch.", hours=1, minutes=0)
+
+    video_games = Activity(task="Play your favorite video game.", hours=1, minutes=0)
+    instrument = Activity(task="Play some music or start learning an instrument.", hours=0, minutes=30)
+
+    watch_movie = Activity(task="Go to the movies with a friend.", hours=2, minutes=0)
+    go_to_bar = Activity(task="Grab a drink with a friend.", hours=1, minutes=30)
+    game_night = Activity(task="Host game night with a few friends!", hours=1, minutes=30)
+
+    dinner = Activity(task="Eat dinner.", hours=1, minutes=0)
+
+    bedtime = Activity(task="Get ready for bed.", hours=1, minutes=0)
+    sleep = Activity(task="Go to sleep!", hours=8, minutes=0)
+
+    session.add_all([snooze, scroll_phone, get_ready, breakfast, skip_breakfast, go_to_class, chores, study, exercise, hike, touch_grass, lunch, video_games, instrument, watch_movie, go_to_bar, game_night, dinner, bedtime, sleep])
     session.commit()
     
     # current_time = time(current_time.hour + find_parentheses.hours, current_time.minute + find_parentheses.minutes).isoformat(timespec="minutes")
     # print("The new time is:", current_time)
-    set_trace()
+
+
+
+
+
+
+
+
+
+
+
+    # set_trace()
