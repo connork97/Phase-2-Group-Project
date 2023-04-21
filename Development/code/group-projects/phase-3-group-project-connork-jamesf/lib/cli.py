@@ -5,14 +5,11 @@ from datetime import time, timedelta, datetime
 
 from models import (Base, Day, Friend, Activity)
 from helpers import good_morning, current_time, general_commands
-
-
+from rich.console import Console
+from rich.style import Style
+console = Console()
 
 
 if __name__ == '__main__':
 
-    print(f"Good morning! The current time is {current_time}.")
-
-    print("What are you going to do first?")
-
-    general_commands("start")
+    good_morning()

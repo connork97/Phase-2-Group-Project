@@ -14,7 +14,7 @@ class Day(Base):
 
     def __repr__(self):
         return f"Day(id={self.id}, " + \
-            f"productivity={self.day})"
+            f"productivity={self.productivity})"
     
 class Activity(Base):
     __tablename__ = "activities"

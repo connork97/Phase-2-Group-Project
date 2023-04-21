@@ -17,7 +17,7 @@ if __name__ == '__main__':
     print(session, "Session Created...")
 
     print("Dropping Tables...")
-    session.query(Day).delete()
+    # session.query(Day).delete()
     session.query(Friend).delete()
     session.query(Activity).delete()
     session.commit()
