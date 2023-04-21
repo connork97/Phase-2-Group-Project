@@ -2,8 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import (Base, Friend, Activity, Day)
 import random
-
-
 from ipdb import set_trace
 
 engine = create_engine('sqlite:///daily_routine.db')
@@ -40,15 +38,30 @@ all_friends = session.query(Friend).all()
 # for activity in all_activities:
 #     print(activity.task, activity.hours, activity.minutes, activity.id)
 
-# days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-# days_index = 0
-
 productivity_score = 0
 
-# general_input = input()
-# if general_input == "see productivity":
-#     print(productivity_score)
-
+def general_commands(user_command):
+    if user_command == "time":
+        print(f"The current time is {current_time}")
+    elif user_command == "restart":
+        global after_class_inputs
+        for i in after_class_inputs:
+            if i != 1:
+                i = 1
+        global after_after_inputs
+        for i in after_after_inputs:
+            if i != 1:
+                i = 1
+        global skipped_class_inputs
+        for i in skipped_class_inputs:
+            if i != 1:
+                i = 1
+        productivity_score = 0
+        good_morning()
+    elif user_command == "productivity":
+        print(productivity_score)
+    else:
+        print("Not a valid command.")
 
 def general_update(chosen_act):
     global productivity_score
@@ -57,65 +70,70 @@ def general_update(chosen_act):
     productivity_score += chosen_act.productivity
 
 def good_morning():
+    print(f"1: {all_activities[0].task}")
+    print(f"2: {all_activities[1].task}")
+    print(f"3: {all_activities[2].task}")
+
     global productivity_score
     productivity_score = 0
-    i = 0
-    j = 1
-    while i in range(0, 3):
-        print(f"{j}: {all_activities[i].task}")
-        i += 1
-        j += 1
     first_input = input()
-    chosen_act = all_activities[int(first_input) - 1]
 
     if first_input == "1":
         print("Okay let's sleep more...")
-        general_update(chosen_act)
+        general_update(all_activities[0])
         print(f"Now it's {current_time}.  What next?")
         good_morning()
-
-    if first_input == "2":
+    elif first_input == "2":
         print("Wow, great use of your time...")
-        general_update(chosen_act)
+        general_update(all_activities[1])
         print(f"Now it's {current_time}, want to get up now?")
         good_morning()
-
-    if first_input == "3":
+    elif first_input == "3":
         print("Good choice!")
-        general_update(chosen_act)
+        general_update(all_activities[2])
         breakfast_or_not()
+    else:
+        general_commands(first_input)
+        good_morning()
 
 def breakfast_or_not():
     if current_time.hours >= 8 or (current_time.hours == 8 and current_time.minutes > 0):
         print(f"It's {current_time} and you're late to class.  Do you even want to go still?")
         print(f"Y: {all_activities[4].task}")
-        print(f"N: {all_activities[3].task}")
+        print(f"N: No I'll just eat my breakfast and relax.")
         first_input = input()
         if first_input == "Y":
             print("Good thing we go to school online...")
             general_update(all_activities[4])
             print(f"Class is over.  It's now {current_time}.  What next?")
             after_class()
-        if first_input == "N":
+        elif first_input == "N":
+            print("Cool! Now that we have all day, what do you want to do?")
             skipped_class()
+        else:
+            general_commands(first_input)
+            breakfast_or_not()
 
     if current_time.hours < 8:    
         print(f"Now it's {current_time}, Do you want to eat some breakfast?")
         print(f"Y: {all_activities[3].task}")
         print(f"N: No I'm not hungry.")
         first_input = input()
+        
         if first_input == "Y":
             general_update(all_activities[3])
-            # current_time.add_minutes(all_activities[3].minutes)
             print("Finished eating breakfast.")
+            print("Alright, class starts at 8:00.  Should we go?")
             class_or_not()
 
-        if first_input == "N":
+        elif first_input == "N":
             print("Alright then.")
             class_or_not()
+        else:
+            general_commands(first_input)
+            breakfast_or_not()
 
 def class_or_not():
-        print("Alright, class starts at 8:00.  Should we go?")
         print("Y: Yes.")
         print("N: No let's do something fun instead!")
         first_input = input()
@@ -125,10 +143,12 @@ def class_or_not():
             general_update(all_activities[5])
             print(f"Class is over.  It's now {current_time}.  What next?")
             after_class()
-        if first_input == "N":
+        elif first_input == "N":
             print("Cool! Now that we have all day, what do you want to do?")
             skipped_class()
-
+        else:
+            general_commands(first_input)
+            class_or_not()
 
 after_class_list = [all_activities[7], all_activities[8], all_activities[12], all_activities[10]]
 after_class_inputs = [1, 1, 1, 1]
@@ -144,30 +164,28 @@ def after_class():
     if first_input == "1":
         general_update(after_class_list[0])
         after_class()
-        # current_time.add_hours(after_class_list[0].hours)
-    if first_input == "2" and after_class_inputs[1] == 1:
+    elif first_input == "2" and after_class_inputs[1] == 1:
         general_update(after_class_list[1])
-        # current_time.add_hours(after_class_list[1].hours)
         after_class_inputs[1] = 0
         after_class()
-    if first_input == "2" and after_class_inputs[1] == 0:
+    elif first_input == "2" and after_class_inputs[1] == 0:
         print("You just went to the gym!  Choose something else.")
         after_class()
-        # after_class_list[1] = "."
-    if first_input == "3" and after_class_inputs[2] == 1:
+    elif first_input == "3" and after_class_inputs[2] == 1:
         general_update(after_class_list[2])
         after_class_inputs[2] = 0
         after_class()
-        # current_time.add_hours(after_class_list[2].hours)
-    if first_input == "3" and after_class_inputs[2] == 0:
+    elif first_input == "3" and after_class_inputs[2] == 0:
         print("You just ate!  Let's do something else.")
         after_class()
-    if first_input == "4":
+    elif first_input == "4":
         general_update(after_class_list[3])
         after_class()
-        # current_time.add_hours(after_class_list[3].hours)
-    if first_input == "5":
+    elif first_input == "5":
         after_after_class()
+    else:
+        general_commands(first_input)
+        after_class()
 
 after_after_list = [all_activities[14], all_activities[15], all_activities[16], all_activities[18]]
 after_after_inputs = [1, 1, 1, 1]
@@ -183,7 +201,7 @@ def after_after_class():
         general_update(after_after_list[0])
         print(f"Playing Wonderwall...")
         after_after_class()
-    if first_input == "2" and after_after_inputs[1] == 1:
+    elif first_input == "2" and after_after_inputs[1] == 1:
         general_update(after_after_list[1])
         after_after_inputs[1] = 0
         chosen_friend = choose_friend()
@@ -193,10 +211,10 @@ def after_after_class():
         print("...")
         print("That was a good movie. What now?")
         after_after_class()
-    if first_input == "2" and after_after_inputs == 0:
+    elif first_input == "2" and after_after_inputs == 0:
         print("You just got back from the movies!  Choose something else.")
         after_after_class()
-    if first_input == "3" and after_after_inputs[2] == 1:
+    elif first_input == "3" and after_after_inputs[2] == 1:
         general_update(after_after_list[2])
         after_after_inputs[2] = 0
         chosen_friend = choose_friend()
@@ -206,13 +224,16 @@ def after_after_class():
         print("...")
         print("Well that was fun, what now?")
         after_after_class()
-    if first_input == "3" and after_after_inputs[2] == 0:
+    elif first_input == "3" and after_after_inputs[2] == 0:
         print("You just got back from drinking.  Maybe you should eat some food or go to sleep?")
-    if first_input == "4":
+    elif first_input == "4":
         print("Alright, let's eat dinner.")
         print("...")
         print("That hit the spot.  It's getting late, do you want to do anything else before bed?")
         post_dinner()
+    else:
+        general_commands(first_input)
+        after_after_class()
 
 def post_dinner():
     remaining_hours = 6 + (12 - int(current_time.hours))
@@ -236,15 +257,18 @@ def post_dinner():
         chosen_video_game = choose_video_game()
         print(f"Okay, let's play {chosen_video_game} for an hour.")
         post_dinner()
-    if post_dinner_input == "2":
+    elif post_dinner_input == "2":
         general_update(all_activities[20])
         post_dinner()
-    if post_dinner_input == "3":
+    elif post_dinner_input == "3":
         general_update(all_activities[19])
         post_dinner()
-    if post_dinner_input == "4":
+    elif post_dinner_input == "4":
         print("Responsible choice.  Getting ready for bed!")
         go_to_sleep()
+    else:
+        general_commands(post_dinner_input)
+        post_dinner()
 
 def choose_video_game():
     print("1: Apex")
@@ -255,13 +279,16 @@ def choose_video_game():
 
     if video_game_input == "1":
         return "Apex"
-    if video_game_input == "2":
+    elif video_game_input == "2":
         return "Call of Duty"
-    if video_game_input == "3":
+    elif video_game_input == "3":
         return "Rocket League"
-    if video_game_input == "4":
+    elif video_game_input == "4":
         return "PUBG"
-    
+    else:
+        general_commands(video_game_input)
+        post_dinner()
+
 skipped_class_inputs = [1, 1, 1, 1]
 
 def skipped_class():
@@ -277,41 +304,44 @@ def skipped_class():
         general_update(all_activities[9])
         skipped_class_inputs[0] = 0
         skipped_class()
-    if skipped_input == "1" and skipped_class_inputs[0] == 0:
+    elif skipped_input == "1" and skipped_class_inputs[0] == 0:
         print("You just got back from a hike! Try something else.")
-    
-    if skipped_input == "2"and skipped_class_inputs[1] == 1:
+        skipped_class()
+    elif skipped_input == "2"and skipped_class_inputs[1] == 1:
         general_update(all_activities[23])
         print("Don't forget your harness!")
         skipped_class_inputs[1] = 0
         skipped_class()
-    if skipped_input == "2" and skipped_class_inputs[1] == 0:
+    elif skipped_input == "2" and skipped_class_inputs[1] == 0:
         print("You just finished climbing! Try something else.")
         skipped_class()
     
-    if skipped_input == "3" and skipped_class_inputs[2] == 1:
+    elif skipped_input == "3" and skipped_class_inputs[2] == 1:
         print("Who do you want to go to brunch with?")
         general_update(all_activities[24])
         skipped_class_inputs[2] = 0
         chosen_friend = choose_friend()
         print(f"Let's get some mimosas with {chosen_friend}")
         skipped_class()
-    if skipped_input == "3" and skipped_class_inputs[2] == 0:
+    elif skipped_input == "3" and skipped_class_inputs[2] == 0:
         print("Let's do something other than brunch now...")
         skipped_class()
     
-    if skipped_input == "4" and skipped_class_inputs[3] == 1:
+    elif skipped_input == "4" and skipped_class_inputs[3] == 1:
         general_update(all_activities[25])   
         print("Let's go Tiger!")
         skipped_class_inputs[3] = 0
         skipped_class()
-    if skipped_input == "4" and skipped_class_inputs[3] == 0:
+    elif skipped_input == "4" and skipped_class_inputs[3] == 0:
         print("You just played 18 holes. That's enough for today.")
         skipped_class()
     
-    if skipped_input == "5":
-        print(current_time)
-        afternoon_activities()        
+    elif skipped_input == "5":
+        afternoon_activities()
+
+    else:
+        general_commands(skipped_input)
+        skipped_class()
 
 def afternoon_activities():
     print(f"It's {current_time} now. Let's do something a bit more productive for while.")
@@ -325,23 +355,29 @@ def afternoon_activities():
         print(f"It's been a bit of a mess around here honestly...")
         general_update(all_activities[6])
         afternoon_activities()
-    if afternoon_input == "2":
+    elif afternoon_input == "2":
         print("Make sure you eat something first.")
         general_update(all_activities[26])
         afternoon_activities()
-    if afternoon_input == "3":
+    elif afternoon_input == "3":
         print("That pile of clothes has been there a while...")
         general_update(all_activities[27])
         afternoon_activities()
-    if afternoon_input == "4":
+    elif afternoon_input == "4":
         print("Do you feel like organizing a game night with a few friends?")
         print("Y: Definitely!")
         print("N: Not in the mood.")
         game_input = input()
         if game_input == "Y":
             game_night()
-        if game_input == "N":
+        elif game_input == "N":
             after_after_class()
+        else:
+            general_commands(afternoon_input)
+            afternoon_activities()
+    else:
+        general_commands(afternoon_input)
+        afternoon_activities()
     
 def game_night():
     friends_list = ["you"]
@@ -370,21 +406,16 @@ def choose_game():
 
     if chosen_game_input == "1":
         return "Catan"
-    if chosen_game_input == "2":
+    elif chosen_game_input == "2":
         return "Monopoly"
-    if chosen_game_input == "3":
+    elif chosen_game_input == "3":
         return "Cards Against Humanity"
-    if chosen_game_input == "4":
+    elif chosen_game_input == "4":
         return "Poker"    
-
+    else:
+        general_commands(chosen_game_input)
+        game_night()
     
-    # friend1 = choose_friend()
-    # friends_list.append(friend1)
-    # friend2 = choose_friend()
-    # friends_list.append(friend2)
-    # friend3 = choose_friend()
-    # friends_list.append(friend3)
-        
 movie_dict = {"mario": ["Super Mario Bros", "PG", "7.4/10"], "wick": ["John Wick: Chapter 4", "R", "8.2/10"], "beau": ["Beau is Afraid", "R", "7.4/10"], "air": ["Air", "R", "7.7/10"]}
 
 def choose_friend():
@@ -404,13 +435,16 @@ def choose_movie():
 
     if movie_input == "1":
         return movie_dict['mario'][0]
-    if movie_input == "2":
+    elif movie_input == "2":
         return movie_dict['wick'][0]
-    if movie_input == "3":
+    elif movie_input == "3":
         return movie_dict['beau'][0]
-    if movie_input == "4":
+    elif movie_input == "4":
         return movie_dict['air'][0]
-    
+    else:
+        general_commands(movie_input)
+        after_after_class()
+
 def choose_bar():
     print("1: Cocktail Lounge")
     print("2: Sports Bar")
@@ -421,14 +455,17 @@ def choose_bar():
 
     if bar_input == "1":
         return "cocktail lounge"
-    if bar_input == "2":
+    elif bar_input == "2":
         return "sports bar"
-    if bar_input == "3":
+    elif bar_input == "3":
         return "dive bar"
-    if bar_input == "4":
+    elif bar_input == "4":
         return "pool hall"
-    if bar_input == "5":
+    elif bar_input == "5":
         return "brewery"
+    else:
+        general_commands(bar_input)
+        after_after_class()
 
 def go_to_sleep():
     global productivity_score

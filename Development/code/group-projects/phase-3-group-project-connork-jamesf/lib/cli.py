@@ -4,7 +4,7 @@ from ipdb import set_trace
 from datetime import time, timedelta, datetime
 
 from models import (Base, Day, Friend, Activity)
-from helpers import good_morning, current_time
+from helpers import good_morning, current_time, general_commands
 
 
 
@@ -15,4 +15,4 @@ if __name__ == '__main__':
 
     print("What are you going to do first?")
 
-    good_morning()
+    general_commands("start")
