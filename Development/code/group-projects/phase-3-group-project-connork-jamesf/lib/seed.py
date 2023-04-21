@@ -62,11 +62,11 @@ if __name__ == '__main__':
     skip_breakfast = Activity(task="Skip breakfast and go to class.  You're running late!", hours=0, minutes=0, productivity=0)
 
     go_to_class = Activity(task="Go to class.", hours=0, minutes=0, productivity=3)
-    chores = Activity(task="Do some chores around the house.", hours=0, minutes=45, productivity=2)
+    chores = Activity(task="Clean up around the house.", hours=0, minutes=45, productivity=2)
     study = Activity(task="Study for an hour.", hours=1, minutes=0, productivity=2)
 
     exercise = Activity(task="Go to the gym.", hours=1, minutes=30, productivity=2)
-    hike = Activity(task="Go for a hike!", hours=2, minutes=0, productivity=1)
+    hike = Activity(task="Go for a hike!", hours=3, minutes=0, productivity=1)
     touch_grass = Activity(task="Touch some grass.", hours=0, minutes=15, productivity=1)
 
     lunch = Activity(task="Grab some lunch.", hours=1, minutes=0, productivity=1)
@@ -86,7 +86,15 @@ if __name__ == '__main__':
     bedtime = Activity(task="Get ready for bed.", hours=1, minutes=0, productivity=1)
     sleep = Activity(task="Go to sleep!", hours=8, minutes=0, productivity=1)
 
-    session.add_all([snooze, scroll_phone, get_ready, breakfast, skip_breakfast, go_to_class, chores, study, exercise, hike, touch_grass, lunch, snack, video_games, instrument, watch_movie, go_to_bar, game_night, dinner, watch_show, read, bedtime, sleep])
+    climb = Activity(task="Go to the climbing gym.", hours=1, minutes=30, productivity=1)
+    brunch = Activity(task="Go to brunch with a friend.", hours=1, minutes=0, productivity=1)
+    golf = Activity(task="Go play golf.", hours=4, minutes=0, productivity=1)
+
+    groceries = Activity(task="Go grocery shopping.", hours=1, minutes=0, productivity=2)
+    laundry = Activity(task="Do your laundry.", hours=1, minutes=0, productivity=2)
+
+    
+    session.add_all([snooze, scroll_phone, get_ready, breakfast, skip_breakfast, go_to_class, chores, study, exercise, hike, touch_grass, lunch, snack, video_games, instrument, watch_movie, go_to_bar, game_night, dinner, watch_show, read, bedtime, sleep, climb, brunch, golf, groceries, laundry])
     session.commit()
     
     # current_time = time(current_time.hour + find_parentheses.hours, current_time.minute + find_parentheses.minutes).isoformat(timespec="minutes")
