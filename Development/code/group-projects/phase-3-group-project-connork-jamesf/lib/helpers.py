@@ -50,9 +50,9 @@ layout["lower"].split_row(
 )
 
 title = Align.center('''                                              
-      /\       |‾‾\     /\    \ /      |  |\  |      ‾‾|‾‾  |   |  |‾‾‾      |    |  |‾‾‾  |‾‾‾
-     /__\      |   |   /__\    |       |  | \ |        |    |---|  |--       |    |  |--   |--
-    /    \     |__/   /    \   |       |  |  \|        |    |   |  |___      |__  |  |     |___
+      /\       |‾‾\     /\    \ /      |  |\  |      ‾‾|‾‾  |   |  |‾‾‾      |    |  |‾‾‾  |‾‾‾     |
+     /__\      |   |   /__\    |       |  | \ |        |    |---|  |--       |    |  |--   |--      |
+    /    \     |__/   /    \   |       |  |  \|        |    |   |  |___      |__  |  |     |___     O
 ''')
 
 current_time = Time(6, 30)
@@ -79,7 +79,7 @@ Here's a list of available commands:
 ''')
 
 layout["upper"].update(
-    Padding(title, (5, 0, 0, 0), style="white")
+    Padding(title, (10, 0, 0, 0), style="white")
 )
 layout["left"].update(
     instructions
@@ -119,7 +119,6 @@ def how_productive(score):
     if score >= 25:
         return "insanely productivy!"
     
-
 def general_commands(user_command):
     
     if user_command == "help":
@@ -154,14 +153,12 @@ def general_commands(user_command):
 
     elif user_command == "most":
         most_prod_day = session.query(Day).order_by(Day.productivity.desc()).first()
-        # print(most_prod_day.id, most_prod_day.productivity)
         day_name = day_of_week(most_prod_day.id)
         day_prod = how_productive(most_prod_day.productivity)
         console.print(f"Your most productive day was a {day_name} and it was {day_prod}", style="bright_cyan")
 
     elif user_command == "least":
         most_prod_day = session.query(Day).order_by(Day.productivity).first()
-        # print(most_prod_day.id, most_prod_day.productivity)
         day_name = day_of_week(most_prod_day.id)
         day_prod = how_productive(most_prod_day.productivity)
 
@@ -651,4 +648,3 @@ def go_to_sleep():
         global current_time
         current_time = Time(6, 30)
         good_morning()
-

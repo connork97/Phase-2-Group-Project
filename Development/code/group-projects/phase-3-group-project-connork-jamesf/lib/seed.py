@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from ipdb import set_trace
 
-
 from models import (Base, Day, Friend, Activity)
 
 if __name__ == '__main__':
@@ -22,23 +21,6 @@ if __name__ == '__main__':
     session.query(Activity).delete()
     session.commit()
 
-
-    # print("Creating day rows...")
-
-    # monday = Day(name="Monday")
-    # tuesday = Day(name="Tuesday")
-    # wednesday = Day(name="Wednesday")
-    # thursday = Day(name="Thursday")
-    # friday = Day(name="Friday")
-    # saturday = Day(name="Saturday")
-    # sunday = Day(name="Sunday")
-
-    # session.add_all([monday, tuesday, wednesday, thursday, friday, saturday, sunday])
-    # session.commit()
-
-   # print("All days of the week added!")
-    
-
     connor = Friend(name="Connor")
     james = Friend(name="James")
     cole = Friend(name="Cole")
@@ -52,7 +34,6 @@ if __name__ == '__main__':
     session.commit()
     
     print("All friends added!")
-
 
     snooze = Activity(task="Hit the snooze button...", hours=0, minutes=30, productivity=0)
     scroll_phone = Activity(task="Scroll on your phone for an hour.", hours=1, minutes=0, productivity=0)
@@ -93,21 +74,5 @@ if __name__ == '__main__':
     groceries = Activity(task="Go grocery shopping.", hours=1, minutes=0, productivity=2)
     laundry = Activity(task="Do your laundry.", hours=1, minutes=0, productivity=2)
 
-    
     session.add_all([snooze, scroll_phone, get_ready, breakfast, skip_breakfast, go_to_class, chores, study, exercise, hike, touch_grass, lunch, snack, video_games, instrument, watch_movie, go_to_bar, game_night, dinner, watch_show, read, bedtime, sleep, climb, brunch, golf, groceries, laundry])
     session.commit()
-    
-    # current_time = time(current_time.hour + find_parentheses.hours, current_time.minute + find_parentheses.minutes).isoformat(timespec="minutes")
-    # print("The new time is:", current_time)
-
-
-
-
-
-
-
-
-
-
-
-    # set_trace()

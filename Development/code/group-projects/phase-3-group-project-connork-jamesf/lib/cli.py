@@ -9,7 +9,6 @@ from rich.console import Console
 from rich.style import Style
 console = Console()
 
-
 if __name__ == '__main__':
 
     good_morning()
